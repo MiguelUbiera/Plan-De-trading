@@ -336,7 +336,7 @@
         <!-- Sección historial / lista de conteo -->
         <div class="counter-stats">
             <div class="stats-header">
-                <div class="subtitulo-list">📊 <strong>Lista de conteo</strong></div> <!-- sin "confirmaciones" -->
+                <div class="subtitulo-list">📊 <strong>Lista de conteo</strong></div>
                 <div class="total-badge"><span id="totalCount">0</span> trades</div>
             </div>
             <div class="history-container">
@@ -378,12 +378,11 @@
             const month = monthNames[now.getMonth()];
             let hours = now.getHours();
             const minutes = now.getMinutes().toString().padStart(2, '0');
-            // Formato 24h
             const hour24 = hours.toString().padStart(2, '0');
             return `${day} ${month} ${hour24}:${minutes}`;
         }
 
-        // Renderizar lista de conteo con el nuevo formato (fecha+hora sin segundos)
+        // Renderizar lista de conteo
         function renderHistoryList() {
             historyListEl.innerHTML = '';
             if (historyEntries.length === 0) {
@@ -398,20 +397,17 @@
                 const entry = historyEntries[i];
                 const li = document.createElement('li');
                 
-                // Trade #
                 const tradeSpan = document.createElement('span');
                 tradeSpan.className = 'history-trade';
                 tradeSpan.innerText = `Trade #${entry.id}`;
                 
-                // Activo
                 const activoSpan = document.createElement('span');
                 activoSpan.className = 'history-activo';
                 activoSpan.innerText = entry.activoNombre ? entry.activoNombre : '—';
                 
-                // Fecha + hora (día, mes abreviado, hora:minutos)
                 const dateTimeSpan = document.createElement('span');
                 dateTimeSpan.className = 'history-datetime';
-                dateTimeSpan.innerText = entry.dateTimeStr;  // ej: "16 Apr 14:30"
+                dateTimeSpan.innerText = entry.dateTimeStr;
                 
                 li.appendChild(tradeSpan);
                 li.appendChild(activoSpan);
@@ -479,7 +475,7 @@
             resetFormAfterConfirm();
         }
 
-        // Exportar a PDF (ventana de impresión)
+        // Exportar a PDF usando la ventana de impresión del navegador
         function exportToPDF() {
             if (historyEntries.length === 0) {
                 showNotification('📭 No hay operaciones registradas para exportar.', true);
