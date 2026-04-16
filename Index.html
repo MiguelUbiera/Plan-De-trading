@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Checklist Trading · Estrategia Personal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0b2b44 0%, #0a2a3f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+            padding: 20px;
+        }
+
+        .mobile-card {
+            max-width: 400px;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 44px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Encabezado */
+        .header {
+            background: #0466c8;
+            background: linear-gradient(135deg, #0466c8, #0353a4);
+            padding: 1rem 1.2rem 0.9rem 1.2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .header h1 span {
+            font-size: 1.25rem;
+        }
+
+        .header p {
+            font-size: 0.65rem;
+            opacity: 0.85;
+            margin-top: 4px;
+        }
+
+        /* Contenido */
+        .content {
+            padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+        }
+
+        /* Lista de cotejo */
+        .checklist-section {
+            background: #f0f9ff;
+            border-radius: 28px;
+            padding: 0.8rem 0.9rem;
+            margin-bottom: 1rem;
+            border: 1px solid #cde5f5;
+        }
+
+        .criterio-item {
+            background: white;
+            border-radius: 20px;
+            padding: 0.55rem 0.9rem;
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #e2f0fd;
+        }
+
+        .criterio-text {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1e2a3e;
+            flex: 1;
+            padding-right: 10px;
+        }
+
+        .custom-check input {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: #0466c8;
+        }
+
+        /* Campo activo */
+        .activo-item {
+            background: white;
+            border-radius: 20px;
+            padding: 0.55rem 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #e2f0fd;
+            margin-top: 0.2rem;
+        }
+        .activo-label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #1e2a3e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #activoInput {
+            border: 1px solid #cde0ef;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            width: 130px;
+            background: #fefefe;
+            font-family: monospace;
+            text-align: center;
+        }
+        #activoInput:focus {
+            outline: none;
+            border-color: #0466c8;
+        }
+
+        /* Botón confirmar */
+        .confirm-btn-wrapper {
+            text-align: center;
+            margin: 0.5rem 0 0.2rem 0;
+        }
+        .confirm-btn {
+            background: #0466c8;
+            border: none;
+            padding: 0.45rem 1.2rem;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(4, 102, 200, 0.3);
+        }
+        .confirm-btn:active {
+            transform: scale(0.96);
+            background: #024e9b;
+        }
+
+        /* Notificación */
+        .notification {
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-top: 6px;
+            margin-bottom: 8px;
+            min-height: 28px;
+            color: #0353a4;
+        }
+        .notification.success {
+            color: #146b3a;
+        }
+        .notification.error {
+            color: #bc3f2e;
+        }
+
+        /* Sección historial / lista de conteo */
+        .counter-stats {
+            background: #fefefe;
+            border-radius: 28px;
+            margin-top: 0.8rem;
+            padding: 0.2rem 0 0.2rem 0;
+            border-top: 1px solid #e2edf7;
+        }
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.6rem;
+            padding: 0.5rem 0 0 0;
+        }
+        .total-badge {
+            background: #0466c8;
+            color: white;
+            border-radius: 50px;
+            padding: 3px 12px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .total-badge span {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        .subtitulo-list {
+            font-weight: 600;
+            color: #1a4c7a;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .history-container {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 0.3rem 0;
+            max-height: 210px;
+            overflow-y: auto;
+        }
+        .history-list {
+            list-style: none;
+        }
+        .history-list li {
+            background: white;
+            margin: 6px 0;
+            padding: 8px 12px;
+            border-radius: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.75rem;
+            border: 1px solid #e3f0fc;
+        }
+        .history-list li::before {
+            content: "✅";
+            font-size: 0.8rem;
+        }
+        .history-trade {
+            font-weight: 600;
+            background: #eef2fc;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+        }
+        .history-activo {
+            background: #e0f0fe;
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-family: monospace;
+            font-size: 0.7rem;
+        }
+        .history-datetime {
+            margin-left: auto;
+            font-family: monospace;
+            font-size: 0.65rem;
+            background: #eef3fc;
+            padding: 2px 8px;
+            border-radius: 30px;
+            white-space: nowrap;
+        }
+        .empty-history {
+            text-align: center;
+            padding: 1rem;
+            color: #7c9ebf;
+            font-size: 0.75rem;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .btn-secondary {
+            background: #eef2f9;
+            border: none;
+            padding: 8px 0;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #0466c8;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+        .btn-secondary:active {
+            background: #dee6f0;
+            transform: scale(0.97);
+        }
+        hr {
+            margin: 10px 0 4px;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(to right, #cde0ef, transparent);
+        }
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+    </style>
+</head>
+<body>
+<div class="mobile-card">
+    <div class="header">
+        <h1><span>📋</span> Estrategia Personal</h1>
+        <p>Checklist de confirmación</p>
+    </div>
+
+    <div class="content">
+        <!-- Lista de cotejo -->
+        <div class="checklist-section">
+            <div class="criterio-item">
+                <div class="criterio-text">📈 ¿Cumple con los criterios de tu trading plan?</div>
+                <div class="custom-check"><input type="checkbox" id="criterioPlan"></div>
+            </div>
+            <div class="criterio-item">
+                <div class="criterio-text">💰 ¿Vale la pena la cantidad que vas a arriesgar?</div>
+                <div class="custom-check"><input type="checkbox" id="criterioRisk"></div>
+            </div>
+            <div class="activo-item">
+                <div class="activo-label"><span>📌</span> Activo:</div>
+                <input type="text" id="activoInput" placeholder="EUR/USD, BTC, etc." maxlength="20" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="confirm-btn-wrapper">
+            <button id="confirmBtn" class="confirm-btn">✨ CONFIRMAR ESTRATEGIA ✨</button>
+        </div>
+
+        <div id="notification" class="notification"></div>
+
+        <!-- Sección historial / lista de conteo -->
+        <div class="counter-stats">
+            <div class="stats-header">
+                <div class="subtitulo-list">📊 <strong>Lista de conteo</strong></div> <!-- sin "confirmaciones" -->
+                <div class="total-badge"><span id="totalCount">0</span> trades</div>
+            </div>
+            <div class="history-container">
+                <ul id="historyList" class="history-list">
+                    <li class="empty-history">✨ Las operaciones confirmadas aparecerán aquí</li>
+                </ul>
+            </div>
+            <div class="action-buttons">
+                <button id="clearHistoryBtn" class="btn-secondary">🧹 Limpiar historial</button>
+                <button id="exportPdfBtn" class="btn-secondary">📄 Exportar a PDF</button>
+            </div>
+            <hr />
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // Elementos DOM
+        const checkPlan = document.getElementById('criterioPlan');
+        const checkRisk = document.getElementById('criterioRisk');
+        const activoInput = document.getElementById('activoInput');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const notificationDiv = document.getElementById('notification');
+        const historyListEl = document.getElementById('historyList');
+        const totalCountSpan = document.getElementById('totalCount');
+        const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+        const exportPdfBtn = document.getElementById('exportPdfBtn');
+
+        // Array de historial: cada entrada { id, dateTimeStr (DD MMM HH:MM), activoNombre }
+        let historyEntries = [];
+
+        // Función para obtener fecha + hora (sin segundos, con día, mes abreviado en inglés)
+        function getFormattedDateTime() {
+            const now = new Date();
+            const day = now.getDate();
+            // Mes abreviado en inglés (3 letras)
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const month = monthNames[now.getMonth()];
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            // Formato 24h
+            const hour24 = hours.toString().padStart(2, '0');
+            return `${day} ${month} ${hour24}:${minutes}`;
+        }
+
+        // Renderizar lista de conteo con el nuevo formato (fecha+hora sin segundos)
+        function renderHistoryList() {
+            historyListEl.innerHTML = '';
+            if (historyEntries.length === 0) {
+                const emptyLi = document.createElement('li');
+                emptyLi.className = 'empty-history';
+                emptyLi.innerText = '📭 Sin operaciones confirmadas aún.';
+                historyListEl.appendChild(emptyLi);
+                totalCountSpan.innerText = '0';
+                return;
+            }
+            for (let i = 0; i < historyEntries.length; i++) {
+                const entry = historyEntries[i];
+                const li = document.createElement('li');
+                
+                // Trade #
+                const tradeSpan = document.createElement('span');
+                tradeSpan.className = 'history-trade';
+                tradeSpan.innerText = `Trade #${entry.id}`;
+                
+                // Activo
+                const activoSpan = document.createElement('span');
+                activoSpan.className = 'history-activo';
+                activoSpan.innerText = entry.activoNombre ? entry.activoNombre : '—';
+                
+                // Fecha + hora (día, mes abreviado, hora:minutos)
+                const dateTimeSpan = document.createElement('span');
+                dateTimeSpan.className = 'history-datetime';
+                dateTimeSpan.innerText = entry.dateTimeStr;  // ej: "16 Apr 14:30"
+                
+                li.appendChild(tradeSpan);
+                li.appendChild(activoSpan);
+                li.appendChild(dateTimeSpan);
+                historyListEl.appendChild(li);
+            }
+            totalCountSpan.innerText = historyEntries.length;
+        }
+
+        // Agregar confirmación al historial
+        function addConfirmationToHistory(activoName) {
+            const newId = historyEntries.length + 1;
+            const nowDateTime = getFormattedDateTime();
+            const activoMostrar = activoName.trim() === "" ? "sin activo" : activoName.trim();
+            historyEntries.push({
+                id: newId,
+                dateTimeStr: nowDateTime,
+                activoNombre: activoMostrar
+            });
+            renderHistoryList();
+        }
+
+        // Limpiar historial
+        function resetHistory() {
+            historyEntries = [];
+            renderHistoryList();
+            showNotification('🧹 Historial reiniciado', false);
+        }
+
+        // Mostrar notificación temporal
+        let notifTimeout;
+        function showNotification(msg, isError = false) {
+            if (notifTimeout) clearTimeout(notifTimeout);
+            notificationDiv.innerText = msg;
+            notificationDiv.className = 'notification';
+            if (isError) notificationDiv.classList.add('error');
+            else notificationDiv.classList.add('success');
+            notifTimeout = setTimeout(() => {
+                notificationDiv.innerText = '';
+                notificationDiv.className = 'notification';
+            }, 2000);
+        }
+
+        // Reiniciar checkboxes y campo activo después de confirmar
+        function resetFormAfterConfirm() {
+            checkPlan.checked = false;
+            checkRisk.checked = false;
+            activoInput.value = '';
+        }
+
+        // Confirmar estrategia
+        function confirmStrategy() {
+            const planValid = checkPlan.checked;
+            const riskValid = checkRisk.checked;
+            const activoRaw = activoInput.value;
+            
+            if (!planValid || !riskValid) {
+                showNotification('❌ Debes aceptar AMBOS criterios (trading plan + riesgo)', true);
+                return;
+            }
+            
+            const activoName = activoRaw.trim() === "" ? "sin activo" : activoRaw.trim();
+            addConfirmationToHistory(activoName);
+            showNotification(`✅ ¡HECHO! ${activoName} · ${getFormattedDateTime()}`, false);
+            resetFormAfterConfirm();
+        }
+
+        // Exportar a PDF (ventana de impresión)
+        function exportToPDF() {
+            if (historyEntries.length === 0) {
+                showNotification('📭 No hay operaciones registradas para exportar.', true);
+                return;
+            }
+            
+            const printWindow = window.open('', '_blank');
+            const fechaHora = new Date().toLocaleString();
+            let rowsHtml = '';
+            for (let i = 0; i < historyEntries.length; i++) {
+                const e = historyEntries[i];
+                rowsHtml += `
+                    <tr>
+                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">${e.id}</td>
+                        <td style="border:1px solid #ccc; padding:8px;">${e.activoNombre}</td>
+                        <td style="border:1px solid #ccc; padding:8px; text-align:center;">${e.dateTimeStr}</td>
+                    </tr>
+                `;
+            }
+            
+            const printHtml = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Lista de Conteo - Trading</title>
+                    <style>
+                        body { font-family: system-ui, 'Segoe UI', sans-serif; margin: 2rem; }
+                        h1 { color: #0466c8; font-size: 1.5rem; }
+                        .header-info { margin-bottom: 1.5rem; color: #2c3e66; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+                        th { background: #0466c8; color: white; padding: 10px; border: 1px solid #0a4c8c; }
+                        td { padding: 8px; border: 1px solid #bdd4e8; }
+                        .footer { margin-top: 2rem; font-size: 0.7rem; text-align: center; color: gray; }
+                    </style>
+                </head>
+                <body>
+                    <h1>📋 Reporte de Trading - Estrategia Personal</h1>
+                    <div class="header-info">📅 Fecha de exportación: ${fechaHora} | Total operaciones: ${historyEntries.length}</div>
+                    <table>
+                        <thead>
+                            <tr><th># Trade</th><th>Activo</th><th>Fecha y hora (DD MMM HH:MM)</th></tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+                    <div class="footer">Documento generado desde checklist de trading • Confirmaciones válidas según criterios personales</div>
+                </body>
+                </html>
+            `;
+            
+            printWindow.document.write(printHtml);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.print();
+            showNotification('📄 PDF listo. Usa "Guardar como PDF" en la ventana de impresión.', false);
+        }
+
+        // Eventos
+        confirmBtn.addEventListener('click', confirmStrategy);
+        clearHistoryBtn.addEventListener('click', resetHistory);
+        exportPdfBtn.addEventListener('click', exportToPDF);
+        
+        function clearNotifOnChange() {
+            if (notificationDiv.innerText.includes('❌')) {
+                notificationDiv.innerText = '';
+                notificationDiv.className = 'notification';
+            }
+        }
+        checkPlan.addEventListener('change', clearNotifOnChange);
+        checkRisk.addEventListener('change', clearNotifOnChange);
+        activoInput.addEventListener('input', clearNotifOnChange);
+        
+        // Inicialización
+        renderHistoryList();
+        resetFormAfterConfirm();
+        notificationDiv.innerText = '';
+    })();
+</script>
+</body>
+</html>
